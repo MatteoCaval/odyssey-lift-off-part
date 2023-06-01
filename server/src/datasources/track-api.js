@@ -12,4 +12,4 @@ class TrackAPI extends RESTDataSource {
     }
 }
 
-module.exports = TrackApi
+module.exports = TrackAPI
