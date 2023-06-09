@@ -12,7 +12,21 @@ const resolvers = {
          * The resolver needs this argument to share state, like authentication information, a database connection, or in our case the RESTDataSource.
          * @param info contains information about the operation's execution state, including the field name, the path to the field from the root, and more
          */
-        tracksForHome: (parent, args, contextValue, info) => {}
+        tracksForHome: (_, __, {dataSources}) => {
+            return dataSources.trackAPI.getTracksForHome()
+        }
+    },
+    Track: { // indicates that is for the track type of our schema
+        /**
+         *
+         * @param parent contains data returned by tracksForHome
+         * @param _
+         * @param dataSources
+         * @param info
+         */
+        author: ({authorId}, _, {dataSources}, info) => {
+            return dataSources.trackAPI.getAuthor(authorId)
+        },
     }
 
 }
