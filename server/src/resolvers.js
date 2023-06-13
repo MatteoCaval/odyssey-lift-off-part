@@ -14,7 +14,12 @@ const resolvers = {
          */
         tracksForHome: (_, __, {dataSources}) => {
             return dataSources.trackAPI.getTracksForHome()
+        },
+
+        track: (_, {id}, {dataSources}) => {
+            return dataSources.trackAPI.getTrack(id)
         }
+
     },
     Track: { // indicates that is for the track type of our schema
         /**
