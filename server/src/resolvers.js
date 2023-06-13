@@ -1,7 +1,9 @@
+// NB Remember that a resolver is responsible for populating the data for a field in your schema
 const resolvers = {
 
     Query: {
         /**
+         *
          *  Returns an array of Tracks that will be used to populate
          *  the homepage grid of our web client
          * @param parent is the returned value of the resolver for this field's parent.
@@ -32,6 +34,10 @@ const resolvers = {
         author: ({authorId}, _, {dataSources}, info) => {
             return dataSources.trackAPI.getAuthor(authorId)
         },
+        // the id is retrieved from the parent object
+        modules: ({id}, _, {dataSources}) => {
+            return dataSources.trackAPI.getTrackModules(id)
+        }
     }
 
 }
