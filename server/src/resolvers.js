@@ -20,6 +20,10 @@ const resolvers = {
 
         track: (_, {id}, {dataSources}) => {
             return dataSources.trackAPI.getTrack(id)
+        },
+
+        module: (_, {id}, {dataSources}) => {
+            return dataSources.trackAPI.getModule(id)
         }
 
     },
