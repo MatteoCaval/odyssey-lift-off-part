@@ -20,6 +20,8 @@ const typeDefs = gql`
         id: ID!
         title: String!
         length: Int
+        videoUrl: String
+        content: String
     }
     "Author of a complete track or a module"
     type Author {
@@ -32,6 +34,7 @@ const typeDefs = gql`
         tracksForHome: [Track!]!
         "fetch a speecific track"
         track(id: ID!): Track
+        module(id: ID!): Module!
     }
 `
 
