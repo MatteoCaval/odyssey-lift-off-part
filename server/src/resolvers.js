@@ -1,4 +1,5 @@
 // NB Remember that a resolver is responsible for populating the data for a field in your schema
+// resolve function names must match the field names in your schema
 const resolvers = {
 
     Query: {
@@ -26,6 +27,17 @@ const resolvers = {
             return dataSources.trackAPI.getModule(id)
         }
 
+    },
+    Mutation: {
+        incrementTrackViews: async (_, {id}, {dataSources}) => { // async because we are using await inside instead of returning a promise
+            const track = await dataSources.trackAPI.incrementTrackViews(id)
+            return {
+                code: 200,
+                success: true,
+                message: `Successfully incremented number of views for track ${id}`,
+                track
+            }
+        }
     },
     Track: { // indicates that is for the track type of our schema
         /**
