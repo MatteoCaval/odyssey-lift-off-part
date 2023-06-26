@@ -30,12 +30,25 @@ const resolvers = {
     },
     Mutation: {
         incrementTrackViews: async (_, {id}, {dataSources}) => { // async because we are using await inside instead of returning a promise
-            const track = await dataSources.trackAPI.incrementTrackViews(id)
-            return {
-                code: 200,
-                success: true,
-                message: `Successfully incremented number of views for track ${id}`,
-                track
+            try {
+                const track = await dataSources.trackAPI.incrementTrackViews(id)
+                return {
+                    code: 200,
+                    success: true,
+                    message: `Successfully incremented number of views for track ${id}`,
+                    track
+                }
+            } catch (err) {
+                // Apollo Server attaches an extensions field to that error that contains relevant error details.
+                //this extensions object will be enriched with a response property,
+                // which provides some additional information about the HTTP response itself.
+                // We can return the status property, which refers to the HTTP status code.
+                return {
+                    code: err.extensions.response.status,
+                    success: false,
+                    message: err.extensions.response.body,
+                    track: null
+                }
             }
         }
     },
