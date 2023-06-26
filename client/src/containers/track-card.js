@@ -3,6 +3,24 @@ import styled from '@emotion/styled';
 import { colors, mq } from '../styles';
 import { humanReadableTimeFromSeconds } from '../utils/helpers';
 import {Link} from "react-router-dom";
+import {gql, useMutation} from "@apollo/client";
+
+/**
+ * Mutation to increment a track's number of views
+ */
+const INCREMENT_TRACK_VIEWS = gql`
+  mutation IncrementTrackViews($incrementTrackViewsId: ID!) {
+    incrementTrackViews(id: $incrementTrackViewsId) {
+      code
+      success
+      message
+      track {
+        id
+        numberOfViews
+      }
+    }
+  }
+`;
 
 /**
  * Track Card component renders basic info in a card format
@@ -11,8 +29,21 @@ import {Link} from "react-router-dom";
 const TrackCard = ({ track }) => {
   const { title, thumbnail, author, length, modulesCount, id } = track;
 
+  // unlike with useQuery, calling useMutation doesn't actually execute the mutation automatically
+  // The first element is the mutate function we'll use to actually run the mutation later on. We'll call it incrementTrackViews.
+  // The second element is an object with information about the mutation: loading, error and data. This component doesn't need it, so we don't have to extract it.
+  const [incrementTrackViews] = useMutation(INCREMENT_TRACK_VIEWS, {
+    variables: { incrementTrackViewsId: id },
+      // to observe the mutation's result, we can use the onCompleted option
+      onCompleted: (data) => {
+        console.log(data)
+      }
+  })
   return (
-    <CardContainer to={`/track/${id}`}>
+    <CardContainer
+        to={`/track/${id}`}
+        onClick={incrementTrackViews}
+    >
       <CardContent>
         <CardImageContainer>
           <CardImage src={thumbnail} alt={title} />
